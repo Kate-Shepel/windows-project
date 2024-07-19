@@ -78,23 +78,33 @@ const modals = () => {
     const trigger = document.querySelectorAll(triggerSelector);
     const modal = document.querySelector(modalSelector);
     const close = document.querySelector(closeSelector);
+    windows = document.querySelectorAll('[data-modal]');
     trigger.forEach(item => {
       item.addEventListener('click', e => {
         if (e.target) {
           e.preventDefault();
         }
+        windows.forEach(item => {
+          item.style.display = 'none';
+        });
         modal.style.display = 'block';
         //document.body.classList.add('modal-open');
         document.body.style.overflow = 'hidden';
       });
     });
     close.addEventListener('click', () => {
+      windows.forEach(item => {
+        item.style.display = 'none';
+      });
       modal.style.display = 'none';
       //document.body.classList.remove('modal-open');
       document.body.style.overflow = '';
     });
     modal.addEventListener('click', e => {
       if (e.target === modal) {
+        windows.forEach(item => {
+          item.style.display = 'none';
+        });
         modal.style.display = 'none';
         //document.body.classList.remove('modal-open');
         document.body.style.overflow = '';
