@@ -25,18 +25,36 @@ const changeModalState = state => {
   function bindActionToElems(event, elem, prop) {
     elem.forEach((item, i) => {
       item.addEventListener(event, () => {
-        if (elem.length > 1) {
-          state[prop] = i;
-        } else {
-          state[prop] = item.value;
+        switch (item.nodeName) {
+          case 'SPAN':
+            state[prop] = i;
+            break;
+          case 'INPUT':
+            if (item.getAttribute('type') === 'checkbox') {
+              i === 0 ? state[prop] = "Cold" : state[prop] = "Warm";
+              elem.forEach((box, j) => {
+                box.checked = false;
+                if (i === j) {
+                  box.checked = true;
+                }
+              });
+            } else {
+              state[prop] = item.value;
+            }
+            break;
+          case 'SELECT':
+            state[prop] = item.value;
+            break;
         }
-        console.log(state);
       });
     });
+    console.log(state);
   }
   bindActionToElems('click', windowForm, 'form');
   bindActionToElems('input', windowWidth, 'width');
   bindActionToElems('input', windowHeight, 'height');
+  bindActionToElems('change', windowType, 'type');
+  bindActionToElems('change', windowProfile, 'profile');
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (changeModalState);
 
