@@ -138,7 +138,11 @@ const forms = state => {
         clearInputs();
         setTimeout(() => {
           statusMessage.remove();
-        }, 5000);
+          if (item.getAttribute('data-calc') === 'end') {
+            document.querySelector('.popup_calc_end_close').click();
+          }
+        }, 3000);
+        Object.keys(state).forEach(key => delete state[key]);
       });
     });
   });
