@@ -6,6 +6,7 @@ const changeModalState = (state) => {
   const windowHeight = document.querySelectorAll('#height');
   const windowType = document.querySelectorAll('#view_type');
   const windowProfile = document.querySelectorAll('.checkbox');
+  const checkboxesCustom = document.querySelectorAll('.checkbox-custom')
 
   checkNumInputs('#width');
   checkNumInputs('#height');
@@ -19,6 +20,9 @@ const changeModalState = (state) => {
             break;
           case 'INPUT':
             if (item.getAttribute('type') === 'checkbox') {
+              checkboxesCustom.forEach(item => {
+                item.style.border = '2px solid #ccc';
+              });
               i === 0 ? state[prop] = "Cold" : state[prop] = "Warm";
               elem.forEach((box, j) => {
                 box.checked = false;
@@ -27,11 +31,22 @@ const changeModalState = (state) => {
                 }
               })
             } else {
-              state[prop] = item.value;
+              if (item.value) {
+                item.style.border = 'none';
+                state[prop] = item.value;
+              } else {
+                item.style.border = '1px solid red';
+              }
+              
             }
             break;
           case 'SELECT':
-            state[prop] = item.value;
+            if (item.value) {
+              state[prop] = item.value;
+              item.style.border = 'none';
+            } else {
+              item.style.border = '1px solid red';
+            }
             break;
         }
       })

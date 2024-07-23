@@ -20,6 +20,7 @@ const changeModalState = state => {
   const windowHeight = document.querySelectorAll('#height');
   const windowType = document.querySelectorAll('#view_type');
   const windowProfile = document.querySelectorAll('.checkbox');
+  const checkboxesCustom = document.querySelectorAll('.checkbox-custom');
   (0,_checkNumInputs__WEBPACK_IMPORTED_MODULE_0__["default"])('#width');
   (0,_checkNumInputs__WEBPACK_IMPORTED_MODULE_0__["default"])('#height');
   function bindActionToElems(event, elem, prop) {
@@ -31,6 +32,9 @@ const changeModalState = state => {
             break;
           case 'INPUT':
             if (item.getAttribute('type') === 'checkbox') {
+              checkboxesCustom.forEach(item => {
+                item.style.border = '2px solid #ccc';
+              });
               i === 0 ? state[prop] = "Cold" : state[prop] = "Warm";
               elem.forEach((box, j) => {
                 box.checked = false;
@@ -39,11 +43,21 @@ const changeModalState = state => {
                 }
               });
             } else {
-              state[prop] = item.value;
+              if (item.value) {
+                item.style.border = 'none';
+                state[prop] = item.value;
+              } else {
+                item.style.border = '1px solid red';
+              }
             }
             break;
           case 'SELECT':
-            state[prop] = item.value;
+            if (item.value) {
+              state[prop] = item.value;
+              item.style.border = 'none';
+            } else {
+              item.style.border = '1px solid red';
+            }
             break;
         }
       });
@@ -168,10 +182,51 @@ const modals = () => {
     const modal = document.querySelector(modalSelector);
     const close = document.querySelector(closeSelector);
     const windows = document.querySelectorAll('[data-modal]');
+    const width = document.querySelector('#width');
+    const height = document.querySelector('#height');
+    const select = document.querySelector('#view_type');
+    const checkboxes = document.querySelectorAll('.checkbox');
+    const checkboxesCustom = document.querySelectorAll('.checkbox-custom');
     trigger.forEach(item => {
       item.addEventListener('click', e => {
         if (e.target) {
           e.preventDefault();
+        }
+        if (item == document.querySelector('.popup_calc_button')) {
+          if (!width.value) {
+            width.style.border = '1px solid red';
+            return;
+          } else if (!height.value) {
+            height.style.border = '1px solid red';
+            return;
+          } else {
+            width.style.border = 'none';
+            height.style.border = 'none';
+          }
+        }
+        if (item == document.querySelector('.popup_calc_profile_button')) {
+          let isChecked = false;
+          checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+              isChecked = true;
+            }
+          });
+          if (!select.value) {
+            select.style.border = '1px solid red';
+            console.log('no select value');
+            return;
+          } else if (!isChecked) {
+            checkboxesCustom.forEach(item => {
+              item.style.border = '1px solid red';
+            });
+            console.log(select.value);
+            return;
+          } else {
+            select.style.border = 'none';
+            checkboxesCustom.forEach(item => {
+              item.style.border = '2px solid #ccc';
+            });
+          }
         }
         windows.forEach(item => {
           item.style.display = 'none';
